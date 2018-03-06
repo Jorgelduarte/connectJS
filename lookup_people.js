@@ -3,6 +3,7 @@ const settings = require("./settings"); // settings.json
 
 const nameARGV = process.argv[2]
 
+
 const client = new pg.Client({
   user     : settings.user,
   password : settings.password,
@@ -20,6 +21,12 @@ client.connect((err) => {
     if (err) {
     return console.error("Connection Error", err);
     }
+    
+    if (nameARGV === undefined) {
+        console.log("YOU NEED INSERT A ARGUMENT");
+        client.end();
+        return 
+        }
 
     // Fetch how many famous were found
     client.query(countFamous, [nameARGV], (err, result) => {
@@ -28,6 +35,7 @@ client.connect((err) => {
         }
     console.log("Searching ...")
     console.log(`Found ${result.rows[0].count} person(s) by the name ${nameARGV}:`);
+    
     });
 
     // Fetch famous
